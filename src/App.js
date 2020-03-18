@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { CardContent, Typography, Card, Button, TextField } from '@material-ui/core';
 import './App.css';
 
-var today = new Date().toISOString().split('T')[0]
+var today = new Date().toISOString().split('T')[0];
 var obj=[];
 const emailval = /\S+@\S+.\S+/;
 
@@ -24,7 +24,7 @@ class App extends Component{
 
   //on submit pushes data to object
   async formSubmit(){
-     if(this.state.dob!==''){
+    if(this.state.dob!==''){
       let dob = new Date(this.state.dob);
       let difference = Date.now()-dob.getTime();
       let date = new Date(difference);
@@ -42,23 +42,23 @@ class App extends Component{
     if(emailval.test(this.state.email)===false){
       this.setState({errorEmail:true})
     }
+    
     if(this.state.first!==''&&this.state.second!==''&&this.state.dob!==''&&this.state.age!==''&&this.state.email!==''){
-      for(let i=0;i<=Object.keys(obj).length;i++){
-        if(obj[0]===undefined){
-          obj.push({firstname:this.state.first,secondname:this.state.second,dob:this.state.dob,age:this.state.age,email:this.state.email})
-          this.setState({
-            obj:obj.sort(compare)
-          })
-          break;
-        }else{
+      if(obj[0]===undefined){
+        obj.push({firstname:this.state.first,secondname:this.state.second,dob:this.state.dob,age:this.state.age,email:this.state.email})
+        this.setState({
+          obj:obj.sort(compare)
+        })
+      }else{
+      obj.map((user,index)=>{
+        console.log("hello");
           try{
-            if(obj[i].email===this.state.email){             
+            if(user.email===this.state.email){             
               this.setState({
                 emailunique:false,
                 errorEmail:true,
                 emailMessage:'Email exists'
               })
-              break;
             }else{
               this.setState({
                 emailunique:true,
@@ -67,20 +67,21 @@ class App extends Component{
               })
             }
           }catch(e){
+              console.log(e);
               
-            }          
-          }
+          }          
+        })
         }
-       if(this.state.emailunique===true){
-          obj.push({firstname:this.state.first,secondname:this.state.second,dob:this.state.dob,age:this.state.age,email:this.state.email})
-          this.setState({
-            obj:obj.sort(compare)
-          })
+      if(this.state.emailunique===true){
+        obj.push({firstname:this.state.first,secondname:this.state.second,dob:this.state.dob,age:this.state.age,email:this.state.email})
+        this.setState({
+          obj:obj.sort(compare)
+        })
       }
     }
   }
  
-
+  //Handling Inputs
   handleEmailChange=event =>{
     this.setState({
       email:event.target.value,
