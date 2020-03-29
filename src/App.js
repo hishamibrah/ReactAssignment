@@ -21,18 +21,8 @@ class App extends Component{
       error:false,
     }
   }
-
-  //on submit pushes data to object
   async formSubmit(){
-    if(this.state.dob!==''){
-      let dob = new Date(this.state.dob);
-      let difference = Date.now()-dob.getTime();
-      let date = new Date(difference);
-      let age = Math.abs(date.getUTCFullYear()-1970)
-      await  this.setState({
-        age:age,
-      })
-    }else if(this.state.first===''){
+   if(this.state.first===''){
       this.setState({ errorFirst:true })
     }if(this.state.second===''){
       this.setState({ errorSecond:true })
@@ -42,7 +32,6 @@ class App extends Component{
     if(emailval.test(this.state.email)===false){
       this.setState({errorEmail:true})
     }
-    
     if(this.state.first!==''&&this.state.second!==''&&this.state.dob!==''&&this.state.age!==''&&this.state.email!==''){
       if(obj[0]===undefined){
         obj.push({firstname:this.state.first,secondname:this.state.second,dob:this.state.dob,age:this.state.age,email:this.state.email})
@@ -50,7 +39,7 @@ class App extends Component{
           obj:obj.sort(compare)
         })
       }else{
-      obj.map((user,index)=>{
+      obj.map((user,index) => {
         console.log("hello");
           try{
             if(user.email===this.state.email){             
@@ -80,8 +69,17 @@ class App extends Component{
       }
     }
   }
- 
-  //Handling Inputs
+  countAge = async()=>{
+    if (this.state.dob !== '') {
+      let dob = new Date(this.state.dob);
+      let difference = Date.now() - dob.getTime();
+      let date = new Date(difference);
+      let age = Math.abs(date.getUTCFullYear() - 1970)
+      this.setState({
+        age: age,
+      })
+    }
+  }
   handleEmailChange=event =>{
     this.setState({
       email:event.target.value,
@@ -106,7 +104,6 @@ class App extends Component{
       errorDate:false,
     })
   }
-
   render(){
     return (
       <div>
@@ -118,13 +115,13 @@ class App extends Component{
               <TextField id="first" error={this.state.errorFirst} required={true} type="text" label="First Name" value={this.state.first} onChange={this.handleFirstChange} variant="outlined" className="inputbox" /><br/><br/>
               <TextField id="second" error={this.state.errorSecond} required={true} label="Last Name" value={this.state.second} variant="outlined" className="inputbox" onChange={this.handleSecondChange} /><br/><br/>
               <TextField id="email" error={this.state.errorEmail} required={true} type="email" label="Email" value={this.state.email} onChange={this.handleEmailChange} variant="outlined" className="inputbox" /><br/><br/>
-              <input id="dob" required={true} type="date" value={this.state.dob} label="DOB" variant="outlined" className="inputbox" onChange={this.handleDobChange} max={today}/><br/><br/>
+              <input id="dob" required={true} type="date" value={this.state.dob} label="DOB" variant="outlined" className="inputbox" onChange={this.handleDobChange} max={today} onBlur={()=>this.countAge()}/><br/><br/>
               <TextField id="age" label="Age" value={this.state.age}  InputLabelProps={{ shrink:true }} variant="outlined" className="inputbox" disabled={true}/><br/><br/>
               <label className="error">{this.state.emailMessage}</label><br/>
               <Button variant="contained" color="primary" onClick={this.formSubmit.bind(this)} type="button">Submit</Button>
             </form>
         </div>
-        <div className="container">      
+        <div className="container">
           {obj.map((user,index)=>(
             <Card key={index} className="root">
               <CardContent>
