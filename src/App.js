@@ -31,45 +31,52 @@ class App extends Component{
     }
     if(emailval.test(this.state.email)===false){
       this.setState({errorEmail:true})
-    }
-    if(this.state.first!==''&&this.state.second!==''&&this.state.dob!==''&&this.state.age!==''&&this.state.email!==''){
-      if(obj[0]===undefined){
-        obj.push({firstname:this.state.first,secondname:this.state.second,dob:this.state.dob,age:this.state.age,email:this.state.email})
-        this.setState({
-          obj:obj.sort(compare)
-        })
-      }else{
-      obj.map((user,index) => {
-        console.log("hello");
-          try{
-            if(user.email===this.state.email){             
-              this.setState({
-                emailunique:false,
-                errorEmail:true,
-                emailMessage:'Email exists'
-              })
-            }else{
-              this.setState({
-                emailunique:true,
-                errorEmail:false,
-                emailMessage:''
-              })
-            }
-          }catch(e){
-              console.log(e);
-              
-          }          
-        })
+    }else{
+      if(this.state.first!==''&&this.state.second!==''&&this.state.dob!==''&&this.state.age!==''&&this.state.email!==''){
+        if(obj[0]===undefined){
+          obj.push({firstname:this.state.first,secondname:this.state.second,dob:this.state.dob,age:this.state.age,email:this.state.email})
+          this.setState({
+            obj:obj.sort(compare)
+          })
+        }else{
+        // eslint-disable-next-line array-callback-return
+        obj.map((user,index) => {
+            try{
+              if(user.email===this.state.email){             
+                this.setState({
+                  emailunique:false,
+                  errorEmail:true,
+                  emailMessage:'Email exists'
+                })
+              }else{
+                this.setState({
+                  emailunique:true,
+                  errorEmail:false,
+                  emailMessage:''
+                })
+              }
+            }catch(e){
+                console.log(e);
+            }          
+          })
+          }
+        if(this.state.emailunique===true){
+          obj.push({firstname:this.state.first,secondname:this.state.second,dob:this.state.dob,age:this.state.age,email:this.state.email})
+          this.setState({
+            obj:obj.sort(compare)
+          })
+          this.setState({
+            email: '',
+            age: '',
+            first: '',
+            second: '',
+            dob: '',
+          })
         }
-      if(this.state.emailunique===true){
-        obj.push({firstname:this.state.first,secondname:this.state.second,dob:this.state.dob,age:this.state.age,email:this.state.email})
-        this.setState({
-          obj:obj.sort(compare)
-        })
       }
     }
   }
-  countAge = async()=>{
+  countAge = ()=>{
     if (this.state.dob !== '') {
       let dob = new Date(this.state.dob);
       let difference = Date.now() - dob.getTime();
@@ -118,6 +125,7 @@ class App extends Component{
               <input id="dob" required={true} type="date" value={this.state.dob} label="DOB" variant="outlined" className="inputbox" onChange={this.handleDobChange} max={today} onBlur={()=>this.countAge()}/><br/><br/>
               <TextField id="age" label="Age" value={this.state.age}  InputLabelProps={{ shrink:true }} variant="outlined" className="inputbox" disabled={true}/><br/><br/>
               <label className="error">{this.state.emailMessage}</label><br/>
+              <label hidden={!this.state.errorEmail} className="error">Enter a valid E-mail</label><br />
               <Button variant="contained" color="primary" onClick={this.formSubmit.bind(this)} type="button">Submit</Button>
             </form>
         </div>
