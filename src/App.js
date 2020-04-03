@@ -65,16 +65,16 @@ class App extends Component{
           this.setState({
             obj:obj.sort(compare)
           })
-          this.setState({
-            email: '',
-            age: '',
-            first: '',
-            second: '',
-            dob: '',
-          })
         }
       }
     }
+    this.setState({
+      email: '',
+      age: '',
+      first: '',
+      second: '',
+      dob: '',
+    })
   }
   countAge = ()=>{
     if (this.state.dob !== '') {
