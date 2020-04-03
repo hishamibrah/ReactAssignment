@@ -67,14 +67,14 @@ class App extends Component{
           })
         }
       }
+      this.setState({
+        email: '',
+        age: '',
+        first: '',
+        second: '',
+        dob: '',
+      })
     }
-    this.setState({
-      email: '',
-      age: '',
-      first: '',
-      second: '',
-      dob: '',
-    })
   }
   countAge = ()=>{
     if (this.state.dob !== '') {
